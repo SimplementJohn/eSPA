@@ -10,6 +10,8 @@ String usernameTelnet = "admin";
 String passwordTelnet = "admin123";
 WiFiServer server(2345); // Port sur lequel le serveur écoute
 
+trameTest "$eSPA;35;26;7;0;1"
+
 void setup() {
   
   Serial.begin(9600);
@@ -18,6 +20,7 @@ void setup() {
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
+    Serial.println("");
     Serial.println("Connexion en cours au réseau WiFi...");
   }
 
@@ -52,6 +55,7 @@ if (client) {
     client.println("Entrez votre mot de passe :");
     delay(5000);
     String receivedPassword = client.readStringUntil('\r\n');
+    client.println("");    
 
     // Vérifier si les informations de connexion sont valides
     if (receivedUsername == usernameTelnet && receivedPassword == passwordTelnet) {
@@ -64,13 +68,16 @@ if (client) {
 
   // Envoi de données périodiques au client
   while (client.connected()) {
-    client.println("Bienvenu sur L'ESP32 !");
+    client.println("Bienvenu sur l'esp32");
+    delay(1000); // Attente de 1 seconde entre chaque envoi de données
+    client.println("Envoie Trame de test");
+    client.println(trameTest)
     delay(1000); // Attente de 1 seconde entre chaque envoi de données
   }
 
   // Fermeture de la connexion avec le client
   client.stop();
-  Serial.println("Client déconnecté");
+  Serial.println("Client déconnecte");
 }
 
 
